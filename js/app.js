@@ -4,7 +4,7 @@
 
 var numberOfCellsOnX =20;
 var numberOfCellsOnY =10;
-var cellWidth=800/numberOfCellsOnX;
+var cellWidth=700/numberOfCellsOnX;
 var cellHeight=500/numberOfCellsOnY;
 
 var context;
@@ -98,6 +98,7 @@ function Start() {
 	var cnt = 200; //number of remaining empty cells on board
 	var food_remain = $("#totalNumberOfBalls").val(); //get number of food from user
 	var pacman_remain = 1;
+
 
 	//start_time
 	for (var i = 0; i < numberOfCellsOnX; i++) {
@@ -1152,15 +1153,64 @@ function hit(){
 	window.clearInterval(monsterInterval4);
 	score = score-10;
 	gameScore=score;  //points starts from 0 every hit
-	removeLife();
-	
+	removeLife();	
 	if(lifes == 0){
 		GameOver();
 	}
 	else{
-		window.alert("You've died!");
-		Start();
+		startAgainWhenDie()
 	}
+	
+}
+
+function startAgainWhenDie(){
+	window.alert("You've died!");
+	document.getElementById("beginningSound").play();
+	i=shape.i;
+	j=shape.j;
+	board[i][j]=0;
+	var emptyCell = findRandomEmptyCell(board);
+	board[emptyCell[0]][emptyCell[1]] = 2;
+	shape.i = emptyCell[0];
+	shape.j = emptyCell[1];
+	//pacman_remain--;
+	
+	monsterShape1.i = 0;
+	monsterShape1.j = 0;
+	
+	if(numberOfMonsters >=2){
+		monsterShape2.i = numberOfCellsOnX-1;
+		monsterShape2.j = numberOfCellsOnY-1;
+	}
+	if(numberOfMonsters >= 3){
+		monsterShape3.i = 0;
+		monsterShape3.j = numberOfCellsOnY-1;
+	}
+	if(numberOfMonsters == 4){
+		monsterShape4.i = numberOfCellsOnX-1;
+		monsterShape4.j = 0;
+	}
+
+	keysDown = {};
+	addEventListener(
+		"keydown",
+		function(e) {
+			keysDown[e.keyCode] = true;
+		},
+		false
+	);
+	addEventListener(
+		"keyup",
+		function(e) {
+			keysDown[e.keyCode] = false;
+		},
+		false
+	);
+
+	Draw();
+	document.getElementById("beginningSound").onended = function(){afterBegginingSoundEnds();}
+	//Start();
+
 }
 
 var PackmanstartAngle = 1.15;
@@ -1192,14 +1242,14 @@ function pacmanDraw(side , center) {
 		PackmanEye.y = -12; // was 15
 	}
 	context.beginPath();
-	context.arc(center.x, center.y, 20, PackmanstartAngle * Math.PI, PackmanEndAngle * Math.PI); // half circle
+	context.arc(center.x, center.y, 17, PackmanstartAngle * Math.PI, PackmanEndAngle * Math.PI); // half circle
 	context.lineTo(center.x, center.y);
 	context.fillStyle = pac_color; //color
 	context.fill();
-	context.beginPath();
-	context.arc(center.x + PackmanEye.x, center.y + PackmanEye.y, 4, 0, 2 * Math.PI); // circle
-	context.fillStyle = "black"; //color
-	context.fill();
+	// context.beginPath();
+	// context.arc(center.x + PackmanEye.x, center.y + PackmanEye.y, 4, 0, 2 * Math.PI); // circle
+	// context.fillStyle = "black"; //color
+	// context.fill();
 }
 
   function AfterLogIn() {
@@ -1290,6 +1340,7 @@ function keyPressed(id,event){
 			emptyLifes();
 		}else {
 			document.getElementById("winningSound").play();
+			clearAllIntervals();
 			alert("Winner!!");
 		}
 	}
