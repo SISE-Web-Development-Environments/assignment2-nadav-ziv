@@ -1,10 +1,10 @@
-html, body {
+/* html, body {
     position:fixed;
     top:0;
     bottom:0;
     left:0;
     right:0;
-}
+} */
 
 body{
     font-family: 'Open Sans Condensed', sans-serif;
@@ -123,7 +123,7 @@ button{
 }
 
 #settings{
-  font-size: 14px;
+  font-size: 13px;
   
 }
 

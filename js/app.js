@@ -1395,6 +1395,13 @@ window.onclick = function(event) {
 	}
   }
 
+  window.addEventListener("keydown", function(e) {
+    //arrow keys
+    if([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
+
 function ShowGame(){
 	$("#register").hide("slow");
 	$("#settings").hide("slow");
